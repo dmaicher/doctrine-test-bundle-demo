@@ -58,4 +58,11 @@ class CounterTest extends KernelTestCase
     {
         $this->assertEmpty($this->em->getRepository(Counter::class)->findAll(), 'changes from previous test must be rolled back!');
     }
+
+    public function testAlterTableDuringTransaction()
+    {
+        $this->em->beginTransaction();
+        $this->em->getConnection()->executeQuery('ALTER TABLE counter CHANGE counter counter INT NOT NULL');
+        $this->em->rollback();
+    }
 }
